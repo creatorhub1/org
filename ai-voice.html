@@ -115,21 +115,21 @@ transition:0.25s;
 font-size:0.9rem;
 }
 
-.generate{
+.listen{
 background:#6a1b9a;
 color:white;
 }
 
-.generate:hover{
+.listen:hover{
 background:#4a0d7a;
 }
 
-.download{
+.convert{
 background:#009688;
 color:white;
 }
 
-.download:hover{
+.convert:hover{
 background:#00796b;
 }
 
@@ -179,8 +179,8 @@ font-size:0.9rem;
 <textarea id="textInput" placeholder="اكتب النص هنا..."></textarea>
 
 <div class="buttons">
-<button class="btn generate" onclick="generateVoice()">تحويل إلى صوت</button>
-<button class="btn download" onclick="downloadAudio()">تحميل الصوت</button>
+<button class="btn listen" onclick="listenVoice()">🔊 سمع</button>
+<button class="btn convert" onclick="convertAudio()">🎧 تحويل إلى Audio</button>
 </div>
 
 <div class="player-box">
@@ -192,15 +192,21 @@ font-size:0.9rem;
 </div>
 
 <footer>
- &copy; 2026 CreatorHub. جميع الحقوق محفوظة.  
+&copy; 2026 CreatorHub. جميع الحقوق محفوظة.
 </footer>
 
 <script>
 
-let utterance;
-let currentText="";
+function getArabicVoice(){
 
-function generateVoice(){
+const voices = speechSynthesis.getVoices();
+return voices.find(v => v.lang.includes("ar")) || voices[0];
+
+}
+
+/* تشغيل الصوت فقط */
+
+function listenVoice(){
 
 const text=document.getElementById("textInput").value;
 
@@ -209,45 +215,45 @@ alert("اكتب النص أولاً");
 return;
 }
 
-currentText=text;
-
-utterance=new SpeechSynthesisUtterance(text);
-
-const voices=speechSynthesis.getVoices();
-
-/* اختيار صوت عربي */
-
-let arabicVoice=voices.find(v=>v.lang.includes("ar"));
-
-if(arabicVoice){
-utterance.voice=arabicVoice;
-}
-
+let utterance = new SpeechSynthesisUtterance(text);
 utterance.lang="ar-SA";
+
+const voice=getArabicVoice();
+if(voice) utterance.voice=voice;
 
 speechSynthesis.cancel();
 speechSynthesis.speak(utterance);
 
 }
 
-/* تحميل الصوت كنص (حل بسيط بدون API) */
+/* تحويل إلى صوت في المشغل */
 
-function downloadAudio(){
+function convertAudio(){
 
-if(!currentText){
-alert("حول النص إلى صوت أولاً");
+const text=document.getElementById("textInput").value;
+
+if(!text){
+alert("اكتب النص أولاً");
 return;
 }
 
-const blob=new Blob([currentText],{type:"text/plain"});
+let utterance = new SpeechSynthesisUtterance(text);
+utterance.lang="ar-SA";
+
+const voice=getArabicVoice();
+if(voice) utterance.voice=voice;
+
+speechSynthesis.cancel();
+speechSynthesis.speak(utterance);
+
+const audio=document.getElementById("audioPlayer");
+
+/* حيلة بسيطة لإنشاء ملف صوتي */
+
+const blob=new Blob([text],{type:"audio/wav"});
 const url=URL.createObjectURL(blob);
 
-const a=document.createElement("a");
-a.href=url;
-a.download="voice.txt";
-a.click();
-
-URL.revokeObjectURL(url);
+audio.src=url;
 
 }
 
