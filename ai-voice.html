@@ -45,32 +45,35 @@ box-shadow:0 15px 35px rgba(0,0,0,0.1);
 
 textarea{
 width:100%;
-height:140px;
+height:150px;
 border-radius:12px;
 border:1px solid #ddd;
 padding:12px;
 font-size:1rem;
 font-family:'Cairo';
 resize:none;
+outline:none;
 }
 
-.buttons{
-display:flex;
-gap:10px;
-margin-top:20px;
-flex-wrap:wrap;
+textarea:focus{
+border-color:#6a1b9a;
 }
 
 button{
+margin-top:20px;
 border:none;
-padding:12px 20px;
-border-radius:25px;
+padding:14px 25px;
+border-radius:30px;
+background:#6a1b9a;
+color:white;
 font-weight:600;
 cursor:pointer;
+font-size:1rem;
 }
 
-.listen{background:#6a1b9a;color:white;}
-.convert{background:#009688;color:white;}
+button:hover{
+background:#4a0d7a;
+}
 
 .player-box{
 margin-top:25px;
@@ -80,13 +83,16 @@ border-radius:12px;
 border:1px solid #eee;
 }
 
-audio{width:100%;}
+audio{
+width:100%;
+}
 
 footer{
 background:#6a1b9a;
 color:white;
 text-align:center;
 padding:18px;
+font-size:0.9rem;
 }
 
 </style>
@@ -96,7 +102,7 @@ padding:18px;
 
 <header>
 <h1>AI Voice</h1>
-<p>حوّل النص إلى صوت طبيعي بسرعة</p>
+<p>حوّل النص إلى صوت طبيعي</p>
 </header>
 
 <div class="main">
@@ -105,10 +111,7 @@ padding:18px;
 
 <textarea id="textInput" placeholder="اكتب النص هنا..."></textarea>
 
-<div class="buttons">
-<button class="listen" onclick="listenVoice()">🔊 سمع</button>
-<button class="convert" onclick="convertAudio()">🎧 تحويل إلى Audio</button>
-</div>
+<button onclick="generateVoice()">🎙 تحويل إلى صوت</button>
 
 <div class="player-box">
 <audio id="audioPlayer" controls></audio>
@@ -124,70 +127,28 @@ padding:18px;
 
 <script>
 
-let mediaRecorder;
-let chunks=[];
-
-function getArabicVoice(){
-const voices=speechSynthesis.getVoices();
-return voices.find(v=>v.lang.includes("ar"))||voices[0];
-}
-
-/* تشغيل الصوت فقط */
-
-function listenVoice(){
+function generateVoice(){
 
 const text=document.getElementById("textInput").value;
 
-if(!text){alert("اكتب نص");return;}
+if(!text){
+alert("اكتب النص أولاً");
+return;
+}
 
 let utterance=new SpeechSynthesisUtterance(text);
-utterance.voice=getArabicVoice();
+
+const voices=speechSynthesis.getVoices();
+let arabicVoice=voices.find(v=>v.lang.includes("ar"));
+
+if(arabicVoice){
+utterance.voice=arabicVoice;
+}
+
 utterance.lang="ar-SA";
 
 speechSynthesis.cancel();
 speechSynthesis.speak(utterance);
-
-}
-
-/* تحويل إلى ملف صوتي */
-
-async function convertAudio(){
-
-const text=document.getElementById("textInput").value;
-
-if(!text){alert("اكتب نص");return;}
-
-const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-
-mediaRecorder=new MediaRecorder(stream);
-
-chunks=[];
-
-mediaRecorder.ondataavailable=e=>{
-chunks.push(e.data);
-};
-
-mediaRecorder.onstop=e=>{
-
-const blob=new Blob(chunks,{type:"audio/webm"});
-const url=URL.createObjectURL(blob);
-
-const audio=document.getElementById("audioPlayer");
-audio.src=url;
-
-};
-
-mediaRecorder.start();
-
-let utterance=new SpeechSynthesisUtterance(text);
-utterance.voice=getArabicVoice();
-utterance.lang="ar-SA";
-
-speechSynthesis.speak(utterance);
-
-utterance.onend=()=>{
-mediaRecorder.stop();
-};
 
 }
 
