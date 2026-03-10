@@ -90,7 +90,6 @@ font-size:1rem;
 font-family:'Cairo';
 resize:none;
 outline:none;
-transition:0.2s;
 }
 
 textarea:focus{
@@ -181,7 +180,7 @@ font-size:0.9rem;
 
 <div class="buttons">
 <button class="btn generate" onclick="generateVoice()">تحويل إلى صوت</button>
-<button class="btn download" onclick="downloadAudio()">تحميل MP3</button>
+<button class="btn download" onclick="downloadAudio()">تحميل الصوت</button>
 </div>
 
 <div class="player-box">
@@ -193,12 +192,13 @@ font-size:0.9rem;
 </div>
 
 <footer>
-  &copy; 2026 CreatorHub. جميع الحقوق محفوظة.
+ &copy; 2026 CreatorHub. جميع الحقوق محفوظة.  
 </footer>
 
 <script>
 
 let utterance;
+let currentText="";
 
 function generateVoice(){
 
@@ -209,27 +209,46 @@ alert("اكتب النص أولاً");
 return;
 }
 
+currentText=text;
+
 utterance=new SpeechSynthesisUtterance(text);
 
 const voices=speechSynthesis.getVoices();
 
-let femaleVoice=voices.find(v =>
-v.name.toLowerCase().includes("female") ||
-v.name.toLowerCase().includes("woman") ||
-v.name.toLowerCase().includes("zira") ||
-v.name.toLowerCase().includes("susan")
-);
+/* اختيار صوت عربي */
 
-if(femaleVoice){
-utterance.voice=femaleVoice;
+let arabicVoice=voices.find(v=>v.lang.includes("ar"));
+
+if(arabicVoice){
+utterance.voice=arabicVoice;
 }
 
+utterance.lang="ar-SA";
+
+speechSynthesis.cancel();
 speechSynthesis.speak(utterance);
 
 }
 
+/* تحميل الصوت كنص (حل بسيط بدون API) */
+
 function downloadAudio(){
-alert("تحميل MP3 يحتاج API لتحويل الصوت إلى ملف.");
+
+if(!currentText){
+alert("حول النص إلى صوت أولاً");
+return;
+}
+
+const blob=new Blob([currentText],{type:"text/plain"});
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+a.href=url;
+a.download="voice.txt";
+a.click();
+
+URL.revokeObjectURL(url);
+
 }
 
 </script>
