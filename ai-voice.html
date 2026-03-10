@@ -8,97 +8,125 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-*{box-sizing:border-box;margin:0;padding:0;}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
-font-family:'Cairo',sans-serif;
-background:#f5f5f7;
-display:flex;
-flex-direction:column;
-min-height:100vh;
+  font-family:'Cairo',sans-serif;
+  background:#f5f5f7;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
 }
 
+/* HEADER */
 header{
-background:linear-gradient(90deg,#6a1b9a,#ab47bc);
-color:white;
-padding:25px;
-text-align:center;
+  background:linear-gradient(90deg,#6a1b9a,#ab47bc);
+  color:white;
+  padding:25px;
+  text-align:center;
+}
+header h1{
+  font-size:2rem;
+  margin-bottom:5px;
+}
+header p{
+  opacity:0.9;
+  font-size:0.95rem;
 }
 
+/* MAIN */
 .main{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:40px 20px;
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 20px;
 }
 
+/* CARD */
 .voice-card{
-background:white;
-width:100%;
-max-width:700px;
-border-radius:20px;
-padding:35px;
-box-shadow:0 15px 35px rgba(0,0,0,0.1);
+  background:white;
+  width:100%;
+  max-width:700px;
+  border-radius:20px;
+  padding:35px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.1);
 }
-<p style="margin-bottom:10px; color:#666; font-size:0.95rem;">
-اكتب أي فكرة أو رسالة في ذهنك… ودع الذكاء الاصطناعي يحولها إلى صوت واضح وجذاب خلال ثوانٍ.
-</p>
 
-<textarea id="textInput" placeholder="اكتب النص هنا..."></textarea>
+/* TITLE */
+.tool-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:#6a1b9a;
+  margin-bottom:10px;
+}
+.tool-desc{
+  font-size:0.9rem;
+  color:#666;
+  margin-bottom:20px;
+}
+
+/* MOTIVATION TEXT */
+.motivation{
+  margin-bottom:10px;
+  color:#666;
+  font-size:0.95rem;
+  font-style:italic;
+}
+
+/* TEXT AREA */
 textarea{
-width:100%;
-height:150px;
-border-radius:12px;
-border:1px solid #ddd;
-padding:12px;
-font-size:1rem;
-font-family:'Cairo';
-resize:none;
-outline:none;
+  width:100%;
+  height:140px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  padding:12px;
+  font-size:1rem;
+  font-family:'Cairo';
+  resize:none;
+  outline:none;
+  transition:0.2s;
 }
-
 textarea:focus{
-border-color:#6a1b9a;
+  border-color:#6a1b9a;
 }
 
-button{
-margin-top:20px;
-border:none;
-padding:14px 25px;
-border-radius:30px;
-background:#6a1b9a;
-color:white;
-font-weight:600;
-cursor:pointer;
-font-size:1rem;
+/* BUTTONS */
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+.btn{
+  border:none;
+  padding:12px 20px;
+  border-radius:25px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s;
+  font-size:0.9rem;
+}
+.generate{
+  background:#6a1b9a;
+  color:white;
+}
+.generate:hover{
+  background:#4a0d7a;
 }
 
-button:hover{
-background:#4a0d7a;
-}
-
-.player-box{
-margin-top:25px;
-padding:15px;
-background:#fafafa;
-border-radius:12px;
-border:1px solid #eee;
-}
-
-audio{
-width:100%;
-}
-
+/* FOOTER */
 footer{
-background:#6a1b9a;
-color:white;
-text-align:center;
-padding:18px;
-font-size:0.9rem;
+  background:#6a1b9a;
+  color:white;
+  text-align:center;
+  padding:18px;
+  font-size:0.9rem;
 }
-
 </style>
 </head>
 
@@ -106,56 +134,59 @@ font-size:0.9rem;
 
 <header>
 <h1>AI Voice</h1>
-<p>حوّل النص إلى صوت طبيعي</p>
+<p>حوّل النص إلى صوت طبيعي بسرعة</p>
 </header>
 
 <div class="main">
-
 <div class="voice-card">
+
+<div class="tool-title">تحويل النص إلى صوت</div>
+<div class="tool-desc">اكتب النص الذي تريد تحويله وسيتم قراءته بصوت امرأة.</div>
+
+<!-- نص تحفيزي -->
+<p class="motivation">
+اكتب أي فكرة أو رسالة في ذهنك… ودع الذكاء الاصطناعي يحولها إلى صوت واضح وجذاب خلال ثوانٍ.
+</p>
 
 <textarea id="textInput" placeholder="اكتب النص هنا..."></textarea>
 
-<button onclick="generateVoice()">🎙 تحويل إلى صوت</button>
-
-<div class="player-box">
-<audio id="audioPlayer" controls></audio>
+<div class="buttons">
+  <button class="btn generate" onclick="generateVoice()">تحويل إلى صوت</button>
 </div>
 
 </div>
-
 </div>
 
 <footer>
-&copy; 2026 CreatorHub. جميع الحقوق محفوظة.
+  &copy; 2026 CreatorHub. كل الحقوق محفوظة لجميع مستخدمي الموقع.
 </footer>
 
 <script>
-
 function generateVoice(){
+  const text=document.getElementById("textInput").value;
+  if(!text){
+    alert("اكتب النص أولاً");
+    return;
+  }
 
-const text=document.getElementById("textInput").value;
+  const utterance=new SpeechSynthesisUtterance(text);
+  const voices=speechSynthesis.getVoices();
 
-if(!text){
-alert("اكتب النص أولاً");
-return;
+  // اختيار صوت امرأة
+  let femaleVoice=voices.find(v =>
+    v.lang.includes('ar') || 
+    v.name.toLowerCase().includes("zira") ||
+    v.name.toLowerCase().includes("susan") ||
+    v.name.toLowerCase().includes("female") ||
+    v.name.toLowerCase().includes("woman")
+  );
+
+  if(femaleVoice){
+    utterance.voice=femaleVoice;
+  }
+
+  speechSynthesis.speak(utterance);
 }
-
-let utterance=new SpeechSynthesisUtterance(text);
-
-const voices=speechSynthesis.getVoices();
-let arabicVoice=voices.find(v=>v.lang.includes("ar"));
-
-if(arabicVoice){
-utterance.voice=arabicVoice;
-}
-
-utterance.lang="ar-SA";
-
-speechSynthesis.cancel();
-speechSynthesis.speak(utterance);
-
-}
-
 </script>
 
 </body>
