@@ -9,11 +9,7 @@
 
 <style>
 
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
 font-family:'Cairo',sans-serif;
@@ -23,26 +19,12 @@ flex-direction:column;
 min-height:100vh;
 }
 
-/* HEADER */
-
 header{
 background:linear-gradient(90deg,#6a1b9a,#ab47bc);
 color:white;
 padding:25px;
 text-align:center;
 }
-
-header h1{
-font-size:2rem;
-margin-bottom:5px;
-}
-
-header p{
-opacity:0.9;
-font-size:0.95rem;
-}
-
-/* MAIN */
 
 .main{
 flex:1;
@@ -51,8 +33,6 @@ justify-content:center;
 align-items:center;
 padding:40px 20px;
 }
-
-/* CARD */
 
 .voice-card{
 background:white;
@@ -63,23 +43,6 @@ padding:35px;
 box-shadow:0 15px 35px rgba(0,0,0,0.1);
 }
 
-/* TITLE */
-
-.tool-title{
-font-size:1.4rem;
-font-weight:700;
-color:#6a1b9a;
-margin-bottom:10px;
-}
-
-.tool-desc{
-font-size:0.9rem;
-color:#666;
-margin-bottom:20px;
-}
-
-/* TEXT AREA */
-
 textarea{
 width:100%;
 height:140px;
@@ -89,14 +52,7 @@ padding:12px;
 font-size:1rem;
 font-family:'Cairo';
 resize:none;
-outline:none;
 }
-
-textarea:focus{
-border-color:#6a1b9a;
-}
-
-/* BUTTONS */
 
 .buttons{
 display:flex;
@@ -105,35 +61,16 @@ margin-top:20px;
 flex-wrap:wrap;
 }
 
-.btn{
+button{
 border:none;
 padding:12px 20px;
 border-radius:25px;
 font-weight:600;
 cursor:pointer;
-transition:0.25s;
-font-size:0.9rem;
 }
 
-.listen{
-background:#6a1b9a;
-color:white;
-}
-
-.listen:hover{
-background:#4a0d7a;
-}
-
-.convert{
-background:#009688;
-color:white;
-}
-
-.convert:hover{
-background:#00796b;
-}
-
-/* AUDIO PLAYER */
+.listen{background:#6a1b9a;color:white;}
+.convert{background:#009688;color:white;}
 
 .player-box{
 margin-top:25px;
@@ -143,18 +80,13 @@ border-radius:12px;
 border:1px solid #eee;
 }
 
-audio{
-width:100%;
-}
-
-/* FOOTER */
+audio{width:100%;}
 
 footer{
 background:#6a1b9a;
 color:white;
 text-align:center;
 padding:18px;
-font-size:0.9rem;
 }
 
 </style>
@@ -171,16 +103,11 @@ font-size:0.9rem;
 
 <div class="voice-card">
 
-<div class="tool-title">تحويل النص إلى صوت</div>
-<div class="tool-desc">
-اكتب النص الذي تريد تحويله وسيتم قراءته بصوت امرأة.
-</div>
-
 <textarea id="textInput" placeholder="اكتب النص هنا..."></textarea>
 
 <div class="buttons">
-<button class="btn listen" onclick="listenVoice()">🔊 سمع</button>
-<button class="btn convert" onclick="convertAudio()">🎧 تحويل إلى Audio</button>
+<button class="listen" onclick="listenVoice()">🔊 سمع</button>
+<button class="convert" onclick="convertAudio()">🎧 تحويل إلى Audio</button>
 </div>
 
 <div class="player-box">
@@ -197,11 +124,12 @@ font-size:0.9rem;
 
 <script>
 
+let mediaRecorder;
+let chunks=[];
+
 function getArabicVoice(){
-
-const voices = speechSynthesis.getVoices();
-return voices.find(v => v.lang.includes("ar")) || voices[0];
-
+const voices=speechSynthesis.getVoices();
+return voices.find(v=>v.lang.includes("ar"))||voices[0];
 }
 
 /* تشغيل الصوت فقط */
@@ -210,50 +138,56 @@ function listenVoice(){
 
 const text=document.getElementById("textInput").value;
 
-if(!text){
-alert("اكتب النص أولاً");
-return;
-}
+if(!text){alert("اكتب نص");return;}
 
-let utterance = new SpeechSynthesisUtterance(text);
+let utterance=new SpeechSynthesisUtterance(text);
+utterance.voice=getArabicVoice();
 utterance.lang="ar-SA";
-
-const voice=getArabicVoice();
-if(voice) utterance.voice=voice;
 
 speechSynthesis.cancel();
 speechSynthesis.speak(utterance);
 
 }
 
-/* تحويل إلى صوت في المشغل */
+/* تحويل إلى ملف صوتي */
 
-function convertAudio(){
+async function convertAudio(){
 
 const text=document.getElementById("textInput").value;
 
-if(!text){
-alert("اكتب النص أولاً");
-return;
-}
+if(!text){alert("اكتب نص");return;}
 
-let utterance = new SpeechSynthesisUtterance(text);
-utterance.lang="ar-SA";
+const stream=await navigator.mediaDevices.getUserMedia({audio:true});
 
-const voice=getArabicVoice();
-if(voice) utterance.voice=voice;
+mediaRecorder=new MediaRecorder(stream);
 
-speechSynthesis.cancel();
-speechSynthesis.speak(utterance);
+chunks=[];
 
-const audio=document.getElementById("audioPlayer");
+mediaRecorder.ondataavailable=e=>{
+chunks.push(e.data);
+};
 
-/* حيلة بسيطة لإنشاء ملف صوتي */
+mediaRecorder.onstop=e=>{
 
-const blob=new Blob([text],{type:"audio/wav"});
+const blob=new Blob(chunks,{type:"audio/webm"});
 const url=URL.createObjectURL(blob);
 
+const audio=document.getElementById("audioPlayer");
 audio.src=url;
+
+};
+
+mediaRecorder.start();
+
+let utterance=new SpeechSynthesisUtterance(text);
+utterance.voice=getArabicVoice();
+utterance.lang="ar-SA";
+
+speechSynthesis.speak(utterance);
+
+utterance.onend=()=>{
+mediaRecorder.stop();
+};
 
 }
 
