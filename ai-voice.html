@@ -2,75 +2,106 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>AI Voice</title>
+<title>CreatorHub AI Voice</title>
+<style>
+body{
+font-family: Arial, sans-serif;
+background: linear-gradient(135deg,#5D4037,#9b59b6);
+color:white;
+text-align:center;
+padding:40px;
+}
+textarea{
+width:80%;
+height:120px;
+padding:10px;
+border-radius:10px;
+border:none;
+font-size:16px;
+}
+select, button{
+margin:15px;
+padding:10px 20px;
+border-radius:8px;
+border:none;
+font-size:16px;
+cursor:pointer;
+}
+button{
+background:#6c5ce7;
+color:white;
+}
+button:hover{
+background:#8e7dff;
+}
+a{
+display:none;
+color:#fff;
+margin-top:10px;
+text-decoration:none;
+padding:10px 20px;
+background:#00b894;
+border-radius:8px;
+}
+a:hover{
+background:#55efc4;
+}
+</style>
 </head>
+<body>
 
-<body style="text-align:center;font-family:Arial">
+<h1>🎤 CreatorHub AI Voice</h1>
 
-<h2>AI Voice</h2>
+<textarea id="text" placeholder="اكتب النص هنا..."></textarea>
+<br>
 
-<textarea id="text" rows="5" cols="40" placeholder="اكتب النص هنا"></textarea>
-
-<br><br>
-
-<select id="voiceType">
-<option value="man">رجل</option>
-<option value="woman">امرأة</option>
-<option value="girl">بنت صغيرة</option>
-<option value="boy">ولد صغير</option>
-<option value="chipmunk">سنجاب</option>
+<select id="voice">
+<option value="EXAVITQu4vr4xnSDxMaL">رجل</option>
+<option value="21m00Tcm4TlvDq8ikWAM">امرأة</option>
+<option value="TxGEqnHWrfWFTfGW9XjX">ولد صغير</option>
+<option value="AZnzlk1XvdvUeBnXmlld">بنت صغيرة</option>
+<option value="ErXwobaYiN019PkySvjV">سنجاب 🐿️</option>
 </select>
+<br>
+
+<button onclick="generate()">تحويل إلى صوت</button>
 
 <br><br>
-
-<label>السرعة</label><br>
-<input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
-
-<br><br>
-
-<button onclick="speak()">تشغيل</button>
+<a id="download" download="voice.mp3">⬇️ تحميل MP3</a>
 
 <script>
+async function generate(){
+  const text = document.getElementById("text").value;
+  const voiceId = document.getElementById("voice").value;
 
-function speak(){
+  if(!text){
+    alert("اكتب النص أولاً");
+    return;
+  }
 
-let text = document.getElementById("text").value;
-let type = document.getElementById("voiceType").value;
-let speed = document.getElementById("speed").value;
+  const response = await fetch("http://localhost:3000/tts", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ text, voiceId })
+  });
 
-let speech = new SpeechSynthesisUtterance(text);
+  if(!response.ok){
+    alert("حدث خطأ، حاول مرة أخرى");
+    return;
+  }
 
-speech.lang = "ar-SA"; // العربية
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
 
-if(type=="man"){
-speech.pitch = 0.7;
-speech.rate = speed;
+  // تشغيل الصوت مباشرة
+  const audio = new Audio(url);
+  audio.play();
+
+  // عرض زر التحميل
+  const link = document.getElementById("download");
+  link.href = url;
+  link.style.display = "inline";
 }
-
-if(type=="woman"){
-speech.pitch = 1.2;
-speech.rate = speed;
-}
-
-if(type=="girl"){
-speech.pitch = 1.8;
-speech.rate = speed;
-}
-
-if(type=="boy"){
-speech.pitch = 1.4;
-speech.rate = speed;
-}
-
-if(type=="chipmunk"){
-speech.pitch = 2;
-speech.rate = 1.6;
-}
-
-speechSynthesis.speak(speech);
-
-}
-
 </script>
 
 </body>
