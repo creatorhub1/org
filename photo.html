@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreatorHub - Photo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Cairo', sans-serif; margin:0; background:#f5f5f5; display:flex; flex-direction:column; align-items:center; }
+  header { width:100%; background:linear-gradient(90deg,#6a1b9a,#ab47bc); color:white; text-align:center; padding:20px; }
+  header h1 { margin:0;font-size:2rem; }
+  header p { opacity:0.9; }
+
+  .editor-container { display:flex; flex-direction:column; align-items:center; margin-top:20px; }
+
+  #canvasContainer { border:2px dashed #6a1b9a; border-radius:15px; background:#fff; position:relative; max-width:800px; max-height:500px; overflow:hidden; }
+  canvas { display:block; }
+
+  .tool-bar { display:flex; justify-content:center; gap:10px; margin-top:15px; flex-wrap: wrap; }
+  .tool-bar button { background:#6a1b9a; color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:bold; transition:0.3s; font-size:1rem; }
+  .tool-bar button:hover{ background:#4a0d7a; }
+
+  .section { display:flex; justify-content:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+  .section button { background:#fff; color:#6a1b9a; border:2px solid #6a1b9a; border-radius:25px; padding:8px 15px; }
+  .section button.active { background:#6a1b9a; color:white; }
+
+  .text-controls { display:flex; flex-direction:column; gap:5px; margin-top:10px; align-items:center; }
+  .text-controls input[type="text"], input[type="color"], input[type="range"], select { width:200px; padding:5px; border-radius:5px; border:1px solid #ccc; }
+
+  .slider-controls { display:flex; gap:10px; align-items:center; margin-top:5px; flex-wrap:wrap; }
+  .slider-controls label { font-size:0.9rem; }
+
+  footer { background:#6a1b9a; color:white; padding:20px; margin-top:20px; width:100%; text-align:center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PhotoLan</h1>
+  <p>تحكم كامل في صورك: قص، تعديل، فلترات، نصوص وملصقات بسهولة وسرعة</p>
+</header>
+
+<div class="editor-container">
+
+  <div id="canvasContainer">
+    <canvas id="photoCanvas"></canvas>
+  </div>
+
+  <div class="tool-bar">
+    <button id="prevBtn">‹</button>
+    <button id="nextBtn">›</button>
+  </div>
+
+  <!-- التبويبات -->
+  <div class="section">
+    <button class="tab-btn active" data-section="filters">فلترات</button>
+    <button class="tab-btn" data-section="text">نصوص</button>
+    <button class="tab-btn" data-section="crop">قص</button>
+  </div>
+
+  <!-- الفلاتر -->
+  <div id="filters" class="section active">
+    <button onclick="applyFilter('none')">بدون</button>
+    <button onclick="applyFilter('grayscale')">رمادي</button>
+    <button onclick="applyFilter('invert')">عكس</button>
+    <button onclick="applyFilter('sepia')">سيبيا</button>
+    <button onclick="applyFilter('brightness')">إضاءة</button>
+    <button onclick="applyFilter('contrast')">تباين</button>
+    <button onclick="applyFilter('saturate')">تشبع</button>
+    <button onclick="applyFilter('hue')">تدرج اللون</button>
+    <button onclick="applyFilter('blur')">تمويه</button>
+    <button onclick="applyFilter('sharpen')">حدة</button>
+    <button onclick="applyFilter('posterize')">تدرج ألوان محدود</button>
+    <button onclick="applyFilter('vintage')">قديم</button>
+    <button onclick="applyFilter('warm')">دفء</button>
+    <button onclick="applyFilter('cool')">برودة</button>
+    <button onclick="applyFilter('custom1')">فلتر مخصص 1</button>
+    <button onclick="applyFilter('blueFilm')">فيلم أزرق</button>
+  </div>
+
+  <!-- النصوص -->
+  <div id="text" class="text-controls section" style="display:none;">
+    <input type="text" id="textInput" placeholder="أدخل النص">
+    <input type="color" id="textColor" value="#ffffff">
+    <input type="range" id="textSize" min="10" max="100" value="40">
+    <select id="fontSelect">
+      <option value="Cairo">Cairo</option>
+      <option value="Arial">Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Times New Roman">Times New Roman</option>
+    </select>
+    <div class="slider-controls">
+      <label>X:</label>
+      <input type="range" id="textX" min="0" max="800" value="50">
+      <label>Y:</label>
+      <input type="range" id="textY" min="0" max="500" value="50">
+    </div>
+  </div>
+
+  <!-- القص -->
+  <div id="crop" class="crop-controls section" style="display:none;">
+    <label>قص حر</label>
+    <button id="cropBtn">قص</button>
+  </div>
+
+  <div class="tool-bar">
+    <input type="file" id="uploadImage" accept="image/*">
+    <button id="downloadBtn">تحميل الصورة</button>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 PhotoLan. جميع الحقوق محفوظة.
+</footer>
+
+<script>
+const canvas = document.getElementById('photoCanvas');
+const ctx = canvas.getContext('2d');
+let originalImage = null;
+let history = [];
+let redoStack = [];
+let currentText = {text:'', x:50, y:50, size:40, color:'#fff', font:'Cairo'};
+let currentFilter = 'none';
+
+// ضبط الصورة أول مرة بحجم 300x300
+function fitImageToCanvas(img){
+  canvas.width = 300;
+  canvas.height = 300;
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+}
+
+// رفع الصورة
+document.getElementById('uploadImage').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload=function(ev){
+    const img = new Image();
+    img.onload=function(){
+      fitImageToCanvas(img);
+      originalImage=ctx.getImageData(0,0,canvas.width,canvas.height);
+      history=[ctx.getImageData(0,0,canvas.width,canvas.height)];
+      redoStack=[];
+      drawCanvas();
+    }
+    img.src=ev.target.result;
+  }
+  reader.readAsDataURL(file);
+});
+
+// التبويبات
+document.querySelectorAll('.tab-btn').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('filters').style.display='none';
+    document.getElementById('text').style.display='none';
+    document.getElementById('crop').style.display='none';
+    document.getElementById(tab.dataset.section).style.display='flex';
+  });
+});
+
+// تطبيق فلتر واحد فقط
+function applyFilter(filter){
+  if(!originalImage) return;
+  currentFilter = filter;
+  ctx.putImageData(originalImage, 0, 0);
+  let imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  let data = imgData.data;
+
+  for(let i=0;i<data.length;i+=4){
+    let r=data[i],g=data[i+1],b=data[i+2];
+    switch(filter){
+      case 'grayscale': let gray=0.3*r+0.59*g+0.11*b; data[i]=data[i+1]=data[i+2]=gray; break;
+      case 'invert': data[i]=255-r; data[i+1]=255-g; data[i+2]=255-b; break;
+      case 'sepia': data[i]=(r*0.393)+(g*0.769)+(b*0.189); data[i+1]=(r*0.349)+(g*0.686)+(b*0.168); data[i+2]=(r*0.272)+(g*0.534)+(b*0.131); break;
+      case 'brightness': data[i]=r*1.2; data[i+1]=g*1.2; data[i+2]=b*1.2; break;
+      case 'contrast': data[i]=((r-128)*1.2)+128; data[i+1]=((g-128)*1.2)+128; data[i+2]=((b-128)*1.2)+128; break;
+      case 'saturate': let avg=(r+g+b)/3; data[i]=avg + (r-avg)*1.5; data[i+1]=avg + (g-avg)*1.5; data[i+2]=avg + (b-avg)*1.5; break;
+      case 'hue': data[i]=b; data[i+2]=r; break;
+      case 'blur': /* تبسيط للعرض */ break;
+      case 'sharpen': /* تبسيط للعرض */ break;
+      case 'posterize': data[i]=Math.floor(r/64)*64; data[i+1]=Math.floor(g/64)*64; data[i+2]=Math.floor(b/64)*64; break;
+      case 'vintage': data[i]*=0.9; data[i+1]*=0.85; data[i+2]*=0.7; break;
+      case 'warm': data[i]*=1.1; data[i+2]*=0.9; break;
+      case 'cool': data[i]*=0.9; data[i+2]*=1.1; break;
+      case 'custom1': data[i]=g; data[i+1]=b; data[i+2]=r; break;
+      case 'blueFilm': data[i]*=0.7; data[i+1]*=0.7; data[i+2]*=1.5; break;
+    }
+  }
+
+  if(filter!=='none') ctx.putImageData(imgData, 0, 0);
+  pushHistory();
+  drawCanvas();
+}
+
+// النصوص
+function updateText(){
+  currentText.text=document.getElementById('textInput').value;
+  currentText.color=document.getElementById('textColor').value;
+  currentText.size=document.getElementById('textSize').value;
+  currentText.font=document.getElementById('fontSelect').value;
+  drawCanvas();
+}
+document.getElementById('textInput').addEventListener('input',updateText);
+document.getElementById('textColor').addEventListener('input',updateText);
+document.getElementById('textSize').addEventListener('input',updateText);
+document.getElementById('fontSelect').addEventListener('change',updateText);
+
+document.getElementById('textX').addEventListener('input', e=>{
+  currentText.x=parseInt(e.target.value);
+  drawCanvas();
+});
+document.getElementById('textY').addEventListener('input', e=>{
+  currentText.y=parseInt(e.target.value);
+  drawCanvas();
+});
+
+function drawCanvas(){
+  if(history.length>0) ctx.putImageData(history[history.length-1],0,0);
+  if(currentText.text){
+    ctx.font=`${currentText.size}px ${currentText.font}`;
+    ctx.fillStyle=currentText.color;
+    ctx.strokeStyle='black';
+    ctx.lineWidth=2;
+    ctx.strokeText(currentText.text,currentText.x,currentText.y);
+    ctx.fillText(currentText.text,currentText.x,currentText.y);
+  }
+}
+
+// تاريخ التعديلات
+function pushHistory(){
+  history.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+  if(history.length>50) history.shift();
+  redoStack=[];
+}
+
+// أسهم قبل / بعد
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(history.length>1){
+    redoStack.push(history.pop());
+    ctx.putImageData(history[history.length-1],0,0);
+    drawCanvas();
+  }
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(redoStack.length>0){
+    const data=redoStack.pop();
+    history.push(data);
+    ctx.putImageData(data,0,0);
+    drawCanvas();
+  }
+});
+
+// تحميل الصورة
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  drawCanvas();
+  const link=document.createElement('a');
+  link.href=canvas.toDataURL();
+  link.download='PhotoLan_Image.png';
+  link.click();
+});
+
+// القص الحر
+document.getElementById('cropBtn').addEventListener('click', ()=>{
+  if(!originalImage) return;
+  let w = parseInt(prompt("أدخل عرض القص:", canvas.width));
+  let h = parseInt(prompt("أدخل ارتفاع القص:", canvas.height));
+  if(!w || !h) return;
+  const tempCanvas=document.createElement('canvas');
+  tempCanvas.width=w; tempCanvas.height=h;
+  const tempCtx=tempCanvas.getContext('2d');
+  tempCtx.drawImage(canvas,0,0,canvas.width,canvas.height,0,0,w,h);
+  canvas.width=w; canvas.height=h;
+  ctx.drawImage(tempCanvas,0,0);
+  originalImage = ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushHistory();
+});
+</script>
+</body>
+        </html>
