@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreatorHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Cairo', sans-serif; background-color: #f8f8f8; color: #333; line-height: 1.6; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #6a1b9a, #ab47bc);
+      color: #fff;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 3rem; margin-bottom: 10px; }
+    header p { font-size: 1.2rem; opacity: 0.9; }
+    header .btn {
+      margin-top: 20px;
+      background-color: #fff;
+      color: #6a1b9a;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    header .btn:hover { background-color: #f3e5f5; }
+
+    /* Features Section */
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      width: 320px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+    }
+    .card h2 { color: #6a1b9a; margin-bottom: 15px; }
+    .card p { color: #555; }
+    .card .btn {
+      margin-top: 20px;
+      background-color: #6a1b9a;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background 0.3s ease;
+    }
+    .card .btn:hover { background-color: #4a0d7a; }
+
+    /* Extra Section */
+    .extra { max-width: 1000px; margin: 50px auto; text-align: center; padding: 0 20px; }
+    .extra h2 { font-size: 2.5rem; color: #6a1b9a; margin-bottom: 20px; }
+    .extra p { font-size: 1.1rem; color: #555; }
+
+    /* Footer */
+    footer { background: #6a1b9a; color: #fff; text-align: center; padding: 30px 20px; margin-top: 50px; }
+
+    /* Responsive */
+    @media(max-width: 768px){
+      .features { flex-direction: column; align-items: center; }
+      header h1 { font-size: 2.2rem; }
+    }
+
+    /* Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin-bottom: 20px; color: #6a1b9a; }
+    .modal button.google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: #4285F4;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .modal button.google-btn:hover { background-color: #357ae8; }
+    .modal .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: #ccc;
+      border: none;
+      width: 25px; height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>CreatorHub</h1>
+    <p>كل أدوات الإبداع التي تحتاجها في مكان واحد</p>
+    <a href="#features" class="btn">ابدأ الآن</a>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+<div class="card">
+  <h2>Photo</h2>
+  <p>تحكم كامل في صورك: قص، فلترات، نصوص، ملصقات، إزالة الخلفية ودمج الصور بطريقة احترافية.</p>
+  <a href="photo.html" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تعديل الصور</a>
+</div>
+
+ <div class="card">
+  <h2>Video</h2>
+  <p>تعديل الفيديو بسرعة: قص، دمج، تأثيرات، نصوص، موسيقى، وتصدير الفيديوهات بجودة عالية.</p>
+  <a href="#" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تعديل الفيديو</a>
+</div>
+ <div class="card">
+  <h2>AI-VOICE</h2>
+  <p>حوّل نصك إلى صوت طبيعي وواضح فورًا!<br>
+     استمع لأي نص بالعربية أو الإنجليزية بسرعة وسهولة.</p>
+  <a href="#" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تحويل الصوت</a>
+</div>
+  </section>
+
+  <!-- Extra Info -->
+  <section class="extra">
+    <h2>لماذا تختارنا؟</h2>
+    <p>منصة واحدة تجمع كل ما تحتاجه لتحرير واجهة سهلة وسريعة، نتائج احترافية، ودعم كامل لجميع الصيغ.</p>
+  </section>
+
+<!-- قسم المراجعات -->
+<section id="reviews" class="extra">
+  <h2>ماذا يقول مستخدمونا؟</h2>
+  <div id="reviewsContainer" style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;"></div>
+</section>
+
+<script>
+const reviewsData = [
+  {name:"سارة محمد", img:"https://i.pravatar.cc/60?img=1", stars:5, comment:"أفضل موقع لتعديل الصور، سهل وسريع!"},
+  {name:"أحمد علي", img:"https://i.pravatar.cc/60?img=2", stars:4, comment:"مفيد جدًا، لكن أحب لو يكون فيه فلتر إضافي."},
+  {name:"ليلى حسن", img:"https://i.pravatar.cc/60?img=3", stars:5, comment:"واجهة رائعة وتجربة سلسة."},
+  {name:"خالد يوسف", img:"https://i.pravatar.cc/60?img=4", stars:3, comment:"عمل جيد لكن أحيانًا الصور تحتاج وقت أطول للتحميل."},
+  {name:"منى جمال", img:"https://i.pravatar.cc/60?img=5", stars:5, comment:"مذهل! كل الأدوات التي أحتاجها موجودة."},
+  {name:"هشام فؤاد", img:"https://i.pravatar.cc/60?img=6", stars:4, comment:"جربت عدة مواقع، وهذا الأفضل."},
+  {name:"ريم سعيد", img:"https://i.pravatar.cc/60?img=7", stars:5, comment:"كل شيء يعمل بسلاسة."},
+  {name:"عمر جمال", img:"https://i.pravatar.cc/60?img=8", stars:4, comment:"يستحق التجربة."},
+  {name:"ندى كمال", img:"https://i.pravatar.cc/60?img=9", stars:5, comment:"الفلترات مذهلة والنتائج ممتازة."},
+  {name:"طارق سامي", img:"https://i.pravatar.cc/60?img=10", stars:3, comment:"يحتاج بعض التحسينات في النصوص."},
+  {name:"سلمى حسين", img:"https://i.pravatar.cc/60?img=11", stars:5, comment:"خدمة رائعة وتجربة ممتعة."},
+  {name:"يونس عبد الله", img:"https://i.pravatar.cc/60?img=12", stars:4, comment:"أحببت الفلترات والتأثيرات."},
+  {name:"فاطمة نور", img:"https://i.pravatar.cc/60?img=13", stars:5, comment:"سهولة الاستخدام مذهلة."},
+  {name:"زياد كريم", img:"https://i.pravatar.cc/60?img=14", stars:4, comment:"ممتاز للمبتدئين والمحترفين."},
+  {name:"هالة يوسف", img:"https://i.pravatar.cc/60?img=15", stars:5, comment:"كل يوم أستخدمه للتصميمات البسيطة."},
+  {name:"محمد صلاح", img:"https://i.pravatar.cc/60?img=16", stars:4, comment:"يستحق التقييم العالي."},
+  {name:"رانيا طارق", img:"https://i.pravatar.cc/60?img=17", stars:5, comment:"أدوات تحرير رائعة."},
+  {name:"إيهاب حسن", img:"https://i.pravatar.cc/60?img=18", stars:3, comment:"تجربة جيدة لكن يمكن تطوير السرعة."},
+  {name:"لمى محمد", img:"https://i.pravatar.cc/60?img=19", stars:5, comment:"أفضل موقع لتعديل الصور والفيديو."},
+  {name:"زياد خالد", img:"https://i.pravatar.cc/60?img=20", stars:4, comment:"مفيد جدًا وسهل الاستخدام."},
+  {name:"جمال فؤاد", img:"https://i.pravatar.cc/60?img=21", stars:5, comment:"واجهة بسيطة واحترافية."},
+  {name:"ليلى زين", img:"https://i.pravatar.cc/60?img=22", stars:4, comment:"استمتعت بالتجربة."},
+  {name:"أحمد سمير", img:"https://i.pravatar.cc/60?img=23", stars:3, comment:"التحميل يحتاج وقت أطول أحيانًا."},
+  {name:"سارة ناصر", img:"https://i.pravatar.cc/60?img=24", stars:5, comment:"أدوات ممتازة وسهلة الاستخدام."},
+  {name:"هشام جمال", img:"https://i.pravatar.cc/60?img=25", stars:4, comment:"موقع مفيد جدًا."},
+  {name:"رانيا سعيد", img:"https://i.pravatar.cc/60?img=26", stars:5, comment:"كل شيء يعمل بسلاسة وبدون مشاكل."},
+  {name:"محمود خالد", img:"https://i.pravatar.cc/60?img=27", stars:4, comment:"استجابة الموقع جيدة."},
+  {name:"نورهان حسن", img:"https://i.pravatar.cc/60?img=28", stars:5, comment:"التجربة ممتعة جدًا."},
+  {name:"محمد إبراهيم", img:"https://i.pravatar.cc/60?img=29", stars:4, comment:"سهولة في تحرير الصور والفيديو."},
+  {name:"سارة مصطفى", img:"https://i.pravatar.cc/60?img=30", stars:5, comment:"أفضل موقع على الإطلاق."},
+  {name:"علي أحمد", img:"https://i.pravatar.cc/60?img=31", stars:3, comment:"يحتاج بعض التحسينات."},
+  {name:"منى عبد الله", img:"https://i.pravatar.cc/60?img=32", stars:5, comment:"أدوات رائعة وواجهة جميلة."},
+  {name:"أحمد جمال", img:"https://i.pravatar.cc/60?img=33", stars:4, comment:"جربت عدة مواقع، وهذا الأفضل."},
+  {name:"ليلى محمد", img:"https://i.pravatar.cc/60?img=34", stars:5, comment:"الفلترات ممتازة جدًا."},
+  {name:"زياد سعيد", img:"https://i.pravatar.cc/60?img=35", stars:4, comment:"سريع وسهل."},
+  {name:"هالة فؤاد", img:"https://i.pravatar.cc/60?img=36", stars:5, comment:"تجربة رائعة للمبتدئين."},
+  {name:"محمد حسن", img:"https://i.pravatar.cc/60?img=37", stars:4, comment:"الموقع جيد جدًا."},
+  {name:"رانيا كمال", img:"https://i.pravatar.cc/60?img=38", stars:5, comment:"النتائج احترافية."},
+  {name:"إيهاب علي", img:"https://i.pravatar.cc/60?img=39", stars:3, comment:"أحيانًا يحتاج تحسين السرعة."},
+  {name:"لمى خالد", img:"https://i.pravatar.cc/60?img=40", stars:5, comment:"موقع ممتاز لتعديل الصور والفيديو."},
+  {name:"زياد ناصر", img:"https://i.pravatar.cc/60?img=41", stars:4, comment:"سهل الاستخدام وعملي."},
+  {name:"جمال أحمد", img:"https://i.pravatar.cc/60?img=42", stars:5, comment:"أدوات رائعة للمبتدئين والمحترفين."},
+  {name:"ليلى سامي", img:"https://i.pravatar.cc/60?img=43", stars:4, comment:"واجهة سلسة وممتعة."},
+  {name:"أحمد فؤاد", img:"https://i.pravatar.cc/60?img=44", stars:5, comment:"أفضل تجربة استخدمتها."},
+  {name:"سارة علي", img:"https://i.pravatar.cc/60?img=45", stars:4, comment:"سهل جدًا وسريع."},
+  {name:"هشام مصطفى", img:"https://i.pravatar.cc/60?img=46", stars:5, comment:"كل شيء يعمل بسلاسة."},
+  {name:"رانيا جمال", img:"https://i.pravatar.cc/60?img=47", stars:4, comment:"تجربة ممتازة للمبتدئين."},
+  {name:"محمد زين", img:"https://i.pravatar.cc/60?img=48", stars:5, comment:"أدوات احترافية وواجهة جميلة."},
+  {name:"ليلى يوسف", img:"https://i.pravatar.cc/60?img=49", stars:4, comment:"الفلترات والتأثيرات رائعة."},
+  {name:"زياد فؤاد", img:"https://i.pravatar.cc/60?img=50", stars:5, comment:"موقع ممتاز وسهل الاستخدام."},
+];
+// عرض 3 مراجعات عشوائية عند الدخول
+function showRandomReviews(){
+  const container = document.getElementById('reviewsContainer');
+  container.innerHTML = "";
+  const shuffled = reviewsData.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0,3);
+  selected.forEach(r=>{
+    const div = document.createElement('div');
+    div.style.background="#fff";
+    div.style.borderRadius="15px";
+    div.style.padding="15px";
+    div.style.width="250px";
+    div.style.boxShadow="0 6px 12px rgba(0,0,0,0.1)";
+    div.style.display="flex";
+    div.style.flexDirection="column";
+    div.style.gap="8px";
+    
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="${r.img}" alt="${r.name}" style="width:40px;height:40px;border-radius:50%;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:bold; font-size:0.9rem; color:#6a1b9a;">${r.name}</span>
+          <span style="font-size:0.8rem; color:#f1c40f;">${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</span>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:#555;">${r.comment}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", showRandomReviews);
+</script>
+<script>
+function showRandomReviews(){
+  const container = document.getElementById('reviewsContainer');
+  container.innerHTML = "";
+  const shuffled = reviewsData.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0,3);
+
+  selected.forEach(r=>{
+    const div = document.createElement('div');
+    div.style.background="#fff";
+    div.style.borderRadius="15px";
+    div.style.padding="15px";
+    div.style.width="250px";
+    div.style.boxShadow="0 6px 12px rgba(0,0,0,0.1)";
+    div.style.display="flex";
+    div.style.flexDirection="column";
+    div.style.gap="8px";
+    div.style.position="relative";
+    div.style.overflow="hidden";
+
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="${r.img}" alt="${r.name}" style="width:40px;height:40px;border-radius:50%;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:bold; font-size:0.9rem; color:#6a1b9a;">${r.name}</span>
+          <span style="font-size:0.8rem; color:#f1c40f;">${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</span>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:#555;">${r.comment}</p>
+      <button class="addCommentBtn" style="
+        position:absolute;
+        top:5px;
+        right:5px;
+        font-size:0.7rem;
+        padding:2px 5px;
+        border:none;
+        border-radius:5px;
+        background:#6a1b9a;
+        color:white;
+        cursor:pointer;
+        display:none;
+      ">تعليق</button>
+      <div class="commentBox" style="display:none; flex-direction:column; gap:5px; margin-top:5px;">
+        <input type="text" placeholder="أدخل تعليقك" style="padding:4px; font-size:0.8rem;">
+        <button style="padding:4px 6px; font-size:0.8rem; background:#4a0d7a; color:white; border:none; border-radius:5px; cursor:pointer;">إرسال</button>
+      </div>
+    `;
+
+    // إظهار زر التعليق عند المرور بالماوس
+    div.addEventListener('mouseenter',()=> div.querySelector('.addCommentBtn').style.display='block');
+    div.addEventListener('mouseleave',()=>{
+      div.querySelector('.addCommentBtn').style.display='none';
+      div.querySelector('.commentBox').style.display='none';
+    });
+
+    // عند الضغط على زر التعليق
+    const btn = div.querySelector('.addCommentBtn');
+    const commentBox = div.querySelector('.commentBox');
+    btn.addEventListener('click', ()=> commentBox.style.display='flex');
+
+    // عند إرسال التعليق
+    const sendBtn = commentBox.querySelector('button');
+    const input = commentBox.querySelector('input');
+    sendBtn.addEventListener('click', ()=>{
+      if(input.value.trim()!==""){
+        alert("تم إرسال التعليق بنجاح!");
+        input.value="";
+        commentBox.style.display='none';
+      }
+    });
+
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", showRandomReviews);
+</script>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 CreatorHub. جميع الحقوق محفوظة.
+  </footer>
+</body>
+    </html>
