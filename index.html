@@ -1,1 +1,346 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>OSMA Digital Agency | شركة أسامة للحلول المتكاملة</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script><style> body { font-family: 'Cairo', sans-serif; background-color: #050810; color: white; overflow-x: hidden; } .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050810 100%); z-index: -1; } .glass-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease, border 0.3s ease; } .glass-card:hover { transform: translateY(-10px); } .gradient-text { background: linear-gradient(90deg, #fbbf24, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } .page-content { display: none; } .page-active { display: block; animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .service-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; padding: 2.5rem; text-align: center; transition: all 0.3s ease; } .btn-glass { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.8rem 1.5rem; border-radius: 1rem; font-weight: bold; width: 100%; transition: all 0.3s ease; cursor: pointer; } .btn-glass:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-3px); } .card-yellow:hover { border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); } .card-green:hover { border-color: #34d399; box-shadow: 0 0 20px rgba(52, 211, 153, 0.1); } .card-purple:hover { border-color: #ab47bc; box-shadow: 0 0 20px rgba(171, 71, 188, 0.1); } .card-blue:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); } .back-btn { display: inline-block; margin-bottom: 2rem; color: #94a3b8; transition: color 0.3s; cursor: pointer; } .back-btn:hover { color: white; } #qrModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; backdrop-filter: blur(8px); } </style></head><body><div class="bg-glow"></div><div id="qrModal"><div class="glass-card p-8 rounded-[2.5rem] w-[90%] max-w-md text-right border-yellow-500/30" style="background: #0d1117;"><h3 class="text-2xl font-black text-yellow-500 mb-2">طلب تصميم QR Code</h3><p class="text-gray-400 text-sm mb-6">أدخل بياناتك وسنقوم بمراجعة الطلب وإرسال رابط الدفع لك.</p><div class="space-y-4"><div><label class="block text-xs text-gray-500 mb-1 mr-1">بريدك الإلكتروني</label><input type="email" id="customerEmail" placeholder="example@mail.com" class="w-100 w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-yellow-500 outline-none transition"></div><div><label class="block text-xs text-gray-500 mb-1 mr-1">الرابط المطلوب (URL)</label><input type="url" id="customerUrl" placeholder="https://..." class="w-100 w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:border-yellow-500 outline-none transition"></div><div class="bg-yellow-500/5 p-3 rounded-xl border border-yellow-500/10"><span class="text-[10px] text-yellow-500/50 block">رقم الطلب التلقائي:</span><span id="orderIdDisplay" class="font-mono font-bold text-yellow-500">---</span></div></div><button onclick="sendOrder()" id="sendBtn" class="btn-glass mt-6 !bg-yellow-500 !text-black border-none">إرسال الطلب</button><button onclick="closeModal()" class="w-full mt-3 text-gray-500 text-xs hover:text-white transition">إلغاء</button></div></div><nav class="p-6 flex justify-between items-center max-w-7xl mx-auto"><div class="text-3xl font-extrabold tracking-tighter gradient-text cursor-pointer" onclick="showPage('home')">OSMA Agency</div><div class="space-x-reverse space-x-8 hidden md:flex font-medium"><button onclick="showPage('home')" class="hover:text-yellow-400 transition">الرئيسية</button><button onclick="showPage('services')" class="hover:text-green-400 transition">الخدمات</button><button onclick="showPage('pricing')" class="hover:text-green-400 transition">الاشتراكات</button></div></nav><main id="home" class="page-content page-active py-24 text-center px-4"><h1 class="text-5xl md:text-8xl font-black mb-8 leading-tight"> نصنع <span class="text-yellow-500">الإبداع</span><br>بلمسة <span class="text-green-500">تقنية</span></h1><p class="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12"> من البرمجة المعقدة إلى التصميم الإبداعي، نحن هنا لنحول فكرتك إلى مشروع واقعي ينافس عالمياً. </p><div class="flex flex-col md:flex-row justify-center gap-6"><button onclick="showPage('choice')" class="px-10 py-4 bg-white text-black font-bold rounded-2xl hover:bg-gray-200 transition text-center shadow-xl shadow-white/5">ابدأ الآن</button></div><div class="mt-32 text-center"><h2 class="text-4xl md:text-5xl font-black text-white mb-4">بماذا تتميز صفحتنا؟</h2><div class="h-1.5 w-32 bg-gradient-to-r from-yellow-500 to-green-500 mx-auto rounded-full shadow-lg shadow-yellow-500/20"></div></div><div class="mt-32 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4"><div class="glass-card p-8 rounded-[2rem] text-right group"><div class="w-14 h-14 bg-yellow-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-yellow-500/20 transition"><i class="fas fa-bolt text-2xl text-yellow-500"></i></div><h3 class="text-2xl font-bold mb-4">سرعة خارقة</h3><p class="text-gray-400 leading-relaxed">نحن نقدّر وقتك، لذلك نلتزم بتسليم المشاريع في أوقات قياسية مع الحفاظ على أعلى معايير الجودة.</p></div><div class="glass-card p-8 rounded-[2rem] text-right group"><div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition"><i class="fas fa-paint-brush text-2xl text-green-400"></i></div><h3 class="text-2xl font-bold mb-4">تصميم عصري</h3><p class="text-gray-400 leading-relaxed">كل بكسل له معنى، نهتم بأدق التفاصيل لنخلق واجهات مستخدم جذابة وتجربة فريدة لعملائك.</p></div><div class="glass-card p-8 rounded-[2rem] text-right group"><div class="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition"><i class="fas fa-shield-alt text-2xl text-purple-400"></i></div><h3 class="text-2xl font-bold mb-4">أمان وموثوقية</h3><p class="text-gray-400 leading-relaxed">مشاريعك محمية بأحدث تقنيات البرمجة، لضمان استقرار الموقع وحماية البيانات في كل الأوقات.</p></div></div><div class="mt-32 text-center border-t border-white/5 pt-16"><h2 class="text-4xl md:text-5xl font-black text-white mb-4">معلومات حول صفحتنا</h2><div class="h-1.5 w-32 bg-gradient-to-r from-yellow-500 to-green-500 mx-auto rounded-full shadow-lg shadow-yellow-500/20"></div></div><div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto pb-16 px-4"><div class="glass-card p-4 rounded-2xl text-center backdrop-blur-xl bg-white/5 border border-white/10 transition-all duration-300 hover:-translate-y-2 hover:bg-white/10 group"><div class="text-2xl font-black text-white mb-1 group-hover:scale-110 transition-transform">+10K</div><div class="text-[12px] text-gray-400 font-medium whitespace-nowrap">مطور وثق بنا</div></div><div class="glass-card p-4 rounded-2xl text-center backdrop-blur-xl bg-white/5 border border-white/10 transition-all duration-300 hover:-translate-y-2 hover:bg-white/10 group"><div class="text-2xl font-black text-white mb-1 group-hover:scale-110 transition-transform">+50K</div><div class="text-[12px] text-gray-400 font-medium whitespace-nowrap">مشروع مكتمل</div></div><div class="glass-card p-4 rounded-2xl text-center backdrop-blur-xl bg-white/5 border border-white/10 transition-all duration-300 hover:-translate-y-2 hover:bg-white/10 group"><div class="text-2xl font-black text-green-500 mb-1 group-hover:scale-110 transition-transform">99.9%</div><div class="text-[12px] text-gray-400 font-medium whitespace-nowrap">وقت التشغيل</div></div><div class="glass-card p-4 rounded-2xl text-center backdrop-blur-xl bg-white/5 border border-white/10 transition-all duration-300 hover:-translate-y-2 hover:bg-white/10 group"><div class="text-2xl font-black text-yellow-500 mb-1 group-hover:scale-110 transition-transform">4.9/5</div><div class="text-[12px] text-gray-400 font-medium whitespace-nowrap">تقييم العملاء</div></div></div></main><section id="choice" class="page-content py-24 text-center px-4"><div onclick="showPage('home')" class="back-btn font-bold">✕ إغلاق والعودة للرئيسية</div><h2 class="text-4xl font-bold mb-12">اختر القسم المطلـوب</h2><div class="flex flex-col md:flex-row justify-center gap-6 max-w-2xl mx-auto"><button onclick="showPage('services')" class="flex-1 px-10 py-12 glass-card rounded-3xl font-bold hover:border-yellow-500 transition"><span class="text-4xl block mb-4">🛠️</span> الخدمات الفردية </button><button onclick="showPage('pricing')" class="flex-1 px-10 py-12 glass-card rounded-3xl font-bold hover:border-green-500 transition"><span class="text-4xl block mb-4">💎</span> خطط الاشتراك </button></div></section><section id="services" class="page-content py-20 max-w-7xl mx-auto px-6"><div onclick="showPage('choice')" class="back-btn font-bold"><i class="fas fa-arrow-right"></i> رجوع للخيارات</div><div class="text-center mb-16"><h2 class="text-4xl font-black mb-2">خدماتنا الاحترافية</h2><p class="text-gray-500 text-sm">حلول إبداعية متكاملة لمشروعك</p></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"><div class="service-card card-yellow"><i class="fas fa-qrcode text-4xl text-yellow-500 mb-6"></i><h3 class="text-xl font-black mb-2">QR Code</h3><span class="text-yellow-500 font-bold mb-4 block text-sm">[1$]</span><p class="text-gray-400 text-sm mb-8 h-12">تصميم كود QR خاص بك وصعب تقليده كما انه يعطي لمسة خاصة بك.</p><button onclick="openModal()" class="btn-glass" style="border-color: rgba(251,191,36,0.3);">اطلب الآن</button></div><div class="service-card card-purple"><i class="fas fa-film text-4xl text-purple-500 mb-6"></i><h3 class="text-xl font-black mb-2">Intro Design</h3><span class="text-green-400 font-bold mb-4 block text-sm">[5$]</span><p class="text-gray-400 text-sm mb-8 h-12">مقدمات فيديو احترافية وسينمائية تعزز من هوية قناتك.</p><button class="btn-glass" style="border-color: rgba(171,71,188,0.3);">اطلب الآن</button></div><div class="service-card card-blue"><i class="fas fa-image text-4xl text-blue-500 mb-6"></i><h3 class="text-xl font-black mb-2">Thumbnail</h3><span class="text-green-400 font-bold mb-4 block text-sm">[5$]</span><p class="text-gray-400 text-sm mb-8 h-12">تصاميم صور مصغرة تزيد من نسبة النقر والمشاهدات بشكل ملحوظ.</p><button class="btn-glass" style="border-color: rgba(59,130,246,0.3);">اطلب الآن</button></div><div class="service-card card-green"><i class="fas fa-code text-4xl text-green-500 mb-6"></i><h3 class="text-xl font-black mb-2">Web-Site</h3><span class="text-green-400 font-bold mb-4 block text-sm">[15$]</span><p class="text-gray-400 text-sm mb-8 h-12">بناء مواقع ويب عصرية وسريعة متوافقة مع جميع الأجهزة.</p><button class="btn-glass" style="border-color: rgba(52,211,153,0.3);">اطلب الآن</button></div></div></section><section id="pricing" class="page-content py-20 max-w-7xl mx-auto px-6"><div onclick="showPage('choice')" class="back-btn font-bold">← رجوع للخيارات</div><div class="text-center mb-16"><h2 class="text-4xl font-bold mb-4">خطط التعاون</h2><div class="h-1.5 w-24 bg-gradient-to-r from-yellow-500 to-green-500 mx-auto rounded-full"></div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-right"><div class="glass-card p-8 rounded-[2.5rem] flex flex-col border-yellow-500/20" style="background: rgba(251, 191, 36, 0.08);"><div class="flex justify-between items-start mb-6"><div class="p-3 bg-yellow-500/20 rounded-2xl">⚡</div><span class="text-yellow-500 font-bold text-sm uppercase">Basic</span></div><h3 class="text-2xl font-bold mb-4 text-white">الخطة المجانية</h3><ul class="text-gray-400 space-y-4 mb-10 flex-grow"><li>✓ تصميم QR Code بسيط</li><li>✓ استشارة برمجية (15 دقيقة)</li></ul><div class="flex gap-3"><button class="flex-[2] py-4 bg-yellow-500 text-black font-black rounded-2xl hover:scale-105 transition">GET</button><div class="flex-1 py-4 border border-yellow-500/40 rounded-2xl flex items-center justify-center font-bold text-yellow-500">FREE</div></div></div><div class="glass-card p-8 rounded-[2.5rem] flex flex-col border-green-500/20 shadow-2xl shadow-green-500/5" style="background: rgba(52, 211, 153, 0.08);"><div class="flex justify-between items-start mb-6"><div class="p-3 bg-green-500/20 rounded-2xl">🔥</div><span class="text-green-400 font-bold text-sm uppercase">Professional</span></div><h3 class="text-2xl font-bold mb-4 text-white">باقة التصميم</h3><ul class="text-gray-400 space-y-4 mb-10 flex-grow"><li>✓ تصميم Intro احترافي</li><li>✓ 5 صور مصغرة</li></ul><div class="flex gap-3"><button class="flex-[2] py-4 bg-green-500 text-black font-black rounded-2xl hover:scale-105 transition">GET</button><div class="flex-1 py-4 border border-green-500/40 rounded-2xl flex items-center justify-center font-bold text-green-400">$35</div></div></div><div class="glass-card p-8 rounded-[2.5rem] flex flex-col border-green-500/20" style="background: rgba(52, 211, 153, 0.08);"><div class="flex justify-between items-start mb-6"><div class="p-3 bg-green-500/20 rounded-2xl">💎</div><span class="text-green-400 font-bold text-sm uppercase">Enterprise</span></div><h3 class="text-2xl font-bold mb-4 text-white">باقة البرمجة</h3><ul class="text-gray-400 space-y-4 mb-10 flex-grow"><li>✓ بناء موقع كامل</li><li>✓ دعم فني لمدة شهر</li></ul><div class="flex gap-3"><button class="flex-[2] py-4 bg-green-500 text-black font-black rounded-2xl hover:scale-105 transition">GET</button><div class="flex-1 py-4 border border-green-500/40 rounded-2xl flex items-center justify-center font-bold text-green-400">$90</div></div></div></div></section><footer class="py-12 border-t border-white/5 text-center"><div class="mb-6 text-xl font-bold gradient-text">OSMA SOLUTIONS</div><p class="text-gray-500 text-sm">حقوق التصميم والبرمجة محفوظة لـ اسامة © 2026</p></footer><script> (function(){ emailjs.init("RsW2TBJmoasHfdfCn"); })(); let currentOrderId = ""; function showPage(pageId) { const pages = document.querySelectorAll('.page-content'); pages.forEach(p => p.classList.remove('page-active')); document.getElementById(pageId).classList.add('page-active'); window.scrollTo(0,0); } function openModal() { currentOrderId = "OSMA-" + Math.floor(1000 + Math.random() * 9000); document.getElementById('orderIdDisplay').innerText = currentOrderId; document.getElementById('qrModal').style.display = 'flex'; } function closeModal() { document.getElementById('qrModal').style.display = 'none'; } function sendOrder() { const email = document.getElementById('customerEmail').value; const url = document.getElementById('customerUrl').value; const btn = document.getElementById('sendBtn'); if(!email || !url) { alert("لطفاً أكمل البيانات"); return; } btn.innerText = "جاري الإرسال..."; btn.disabled = true; const templateParams = { order_id: currentOrderId, customer_email: email, target_url: url, service_name: "
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreatorHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Cairo', sans-serif; background-color: #f8f8f8; color: #333; line-height: 1.6; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #6a1b9a, #ab47bc);
+      color: #fff;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 3rem; margin-bottom: 10px; }
+    header p { font-size: 1.2rem; opacity: 0.9; }
+    header .btn {
+      margin-top: 20px;
+      background-color: #fff;
+      color: #6a1b9a;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    header .btn:hover { background-color: #f3e5f5; }
+
+    /* Features Section */
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      width: 320px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+    }
+    .card h2 { color: #6a1b9a; margin-bottom: 15px; }
+    .card p { color: #555; }
+    .card .btn {
+      margin-top: 20px;
+      background-color: #6a1b9a;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background 0.3s ease;
+    }
+    .card .btn:hover { background-color: #4a0d7a; }
+
+    /* Extra Section */
+    .extra { max-width: 1000px; margin: 50px auto; text-align: center; padding: 0 20px; }
+    .extra h2 { font-size: 2.5rem; color: #6a1b9a; margin-bottom: 20px; }
+    .extra p { font-size: 1.1rem; color: #555; }
+
+    /* Footer */
+    footer { background: #6a1b9a; color: #fff; text-align: center; padding: 30px 20px; margin-top: 50px; }
+
+    /* Responsive */
+    @media(max-width: 768px){
+      .features { flex-direction: column; align-items: center; }
+      header h1 { font-size: 2.2rem; }
+    }
+
+    /* Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin-bottom: 20px; color: #6a1b9a; }
+    .modal button.google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: #4285F4;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .modal button.google-btn:hover { background-color: #357ae8; }
+    .modal .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: #ccc;
+      border: none;
+      width: 25px; height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>CreatorHub</h1>
+    <p>كل أدوات الإبداع التي تحتاجها في مكان واحد</p>
+    <a href="#features" class="btn">ابدأ الآن</a>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+<div class="card">
+  <h2>Photo</h2>
+  <p>تحكم كامل في صورك: قص، فلترات، نصوص، ملصقات، إزالة الخلفية ودمج الصور بطريقة احترافية.</p>
+  <a href="photo.html" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تعديل الصور</a>
+</div>
+
+ <div class="card">
+  <h2>Video</h2>
+  <p>تعديل الفيديو بسرعة: قص، دمج، تأثيرات، نصوص، موسيقى، وتصدير الفيديوهات بجودة عالية.</p>
+  <a href="#" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تعديل الفيديو</a>
+</div>
+ <div class="card">
+  <h2>AI-VOICE</h2>
+  <p>حوّل نصك إلى صوت طبيعي وواضح فورًا!<br>
+     استمع لأي نص بالعربية أو الإنجليزية بسرعة وسهولة.</p>
+  <a href="ai-voice.html" class="btn" style="margin-top:15px; display:inline-block;">ابدأ تحويل الصوت</a>
+</div>
+  </section>
+
+  <!-- Extra Info -->
+  <section class="extra">
+    <h2>لماذا تختارنا؟</h2>
+    <p>منصة واحدة تجمع كل ما تحتاجه لتحرير واجهة سهلة وسريعة، نتائج احترافية، ودعم كامل لجميع الصيغ.</p>
+  </section>
+
+<!-- قسم المراجعات -->
+<section id="reviews" class="extra">
+  <h2>ماذا يقول مستخدمونا؟</h2>
+  <div id="reviewsContainer" style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;"></div>
+</section>
+
+<script>
+const reviewsData = [
+  {name:"سارة محمد", img:"https://i.pravatar.cc/60?img=1", stars:5, comment:"أفضل موقع لتعديل الصور، سهل وسريع!"},
+  {name:"أحمد علي", img:"https://i.pravatar.cc/60?img=2", stars:4, comment:"مفيد جدًا، لكن أحب لو يكون فيه فلتر إضافي."},
+  {name:"ليلى حسن", img:"https://i.pravatar.cc/60?img=3", stars:5, comment:"واجهة رائعة وتجربة سلسة."},
+  {name:"خالد يوسف", img:"https://i.pravatar.cc/60?img=4", stars:3, comment:"عمل جيد لكن أحيانًا الصور تحتاج وقت أطول للتحميل."},
+  {name:"منى جمال", img:"https://i.pravatar.cc/60?img=5", stars:5, comment:"مذهل! كل الأدوات التي أحتاجها موجودة."},
+  {name:"هشام فؤاد", img:"https://i.pravatar.cc/60?img=6", stars:4, comment:"جربت عدة مواقع، وهذا الأفضل."},
+  {name:"ريم سعيد", img:"https://i.pravatar.cc/60?img=7", stars:5, comment:"كل شيء يعمل بسلاسة."},
+  {name:"عمر جمال", img:"https://i.pravatar.cc/60?img=8", stars:4, comment:"يستحق التجربة."},
+  {name:"ندى كمال", img:"https://i.pravatar.cc/60?img=9", stars:5, comment:"الفلترات مذهلة والنتائج ممتازة."},
+  {name:"طارق سامي", img:"https://i.pravatar.cc/60?img=10", stars:3, comment:"يحتاج بعض التحسينات في النصوص."},
+  {name:"سلمى حسين", img:"https://i.pravatar.cc/60?img=11", stars:5, comment:"خدمة رائعة وتجربة ممتعة."},
+  {name:"يونس عبد الله", img:"https://i.pravatar.cc/60?img=12", stars:4, comment:"أحببت الفلترات والتأثيرات."},
+  {name:"فاطمة نور", img:"https://i.pravatar.cc/60?img=13", stars:5, comment:"سهولة الاستخدام مذهلة."},
+  {name:"زياد كريم", img:"https://i.pravatar.cc/60?img=14", stars:4, comment:"ممتاز للمبتدئين والمحترفين."},
+  {name:"هالة يوسف", img:"https://i.pravatar.cc/60?img=15", stars:5, comment:"كل يوم أستخدمه للتصميمات البسيطة."},
+  {name:"محمد صلاح", img:"https://i.pravatar.cc/60?img=16", stars:4, comment:"يستحق التقييم العالي."},
+  {name:"رانيا طارق", img:"https://i.pravatar.cc/60?img=17", stars:5, comment:"أدوات تحرير رائعة."},
+  {name:"إيهاب حسن", img:"https://i.pravatar.cc/60?img=18", stars:3, comment:"تجربة جيدة لكن يمكن تطوير السرعة."},
+  {name:"لمى محمد", img:"https://i.pravatar.cc/60?img=19", stars:5, comment:"أفضل موقع لتعديل الصور والفيديو."},
+  {name:"زياد خالد", img:"https://i.pravatar.cc/60?img=20", stars:4, comment:"مفيد جدًا وسهل الاستخدام."},
+  {name:"جمال فؤاد", img:"https://i.pravatar.cc/60?img=21", stars:5, comment:"واجهة بسيطة واحترافية."},
+  {name:"ليلى زين", img:"https://i.pravatar.cc/60?img=22", stars:4, comment:"استمتعت بالتجربة."},
+  {name:"أحمد سمير", img:"https://i.pravatar.cc/60?img=23", stars:3, comment:"التحميل يحتاج وقت أطول أحيانًا."},
+  {name:"سارة ناصر", img:"https://i.pravatar.cc/60?img=24", stars:5, comment:"أدوات ممتازة وسهلة الاستخدام."},
+  {name:"هشام جمال", img:"https://i.pravatar.cc/60?img=25", stars:4, comment:"موقع مفيد جدًا."},
+  {name:"رانيا سعيد", img:"https://i.pravatar.cc/60?img=26", stars:5, comment:"كل شيء يعمل بسلاسة وبدون مشاكل."},
+  {name:"محمود خالد", img:"https://i.pravatar.cc/60?img=27", stars:4, comment:"استجابة الموقع جيدة."},
+  {name:"نورهان حسن", img:"https://i.pravatar.cc/60?img=28", stars:5, comment:"التجربة ممتعة جدًا."},
+  {name:"محمد إبراهيم", img:"https://i.pravatar.cc/60?img=29", stars:4, comment:"سهولة في تحرير الصور والفيديو."},
+  {name:"سارة مصطفى", img:"https://i.pravatar.cc/60?img=30", stars:5, comment:"أفضل موقع على الإطلاق."},
+  {name:"علي أحمد", img:"https://i.pravatar.cc/60?img=31", stars:3, comment:"يحتاج بعض التحسينات."},
+  {name:"منى عبد الله", img:"https://i.pravatar.cc/60?img=32", stars:5, comment:"أدوات رائعة وواجهة جميلة."},
+  {name:"أحمد جمال", img:"https://i.pravatar.cc/60?img=33", stars:4, comment:"جربت عدة مواقع، وهذا الأفضل."},
+  {name:"ليلى محمد", img:"https://i.pravatar.cc/60?img=34", stars:5, comment:"الفلترات ممتازة جدًا."},
+  {name:"زياد سعيد", img:"https://i.pravatar.cc/60?img=35", stars:4, comment:"سريع وسهل."},
+  {name:"هالة فؤاد", img:"https://i.pravatar.cc/60?img=36", stars:5, comment:"تجربة رائعة للمبتدئين."},
+  {name:"محمد حسن", img:"https://i.pravatar.cc/60?img=37", stars:4, comment:"الموقع جيد جدًا."},
+  {name:"رانيا كمال", img:"https://i.pravatar.cc/60?img=38", stars:5, comment:"النتائج احترافية."},
+  {name:"إيهاب علي", img:"https://i.pravatar.cc/60?img=39", stars:3, comment:"أحيانًا يحتاج تحسين السرعة."},
+  {name:"لمى خالد", img:"https://i.pravatar.cc/60?img=40", stars:5, comment:"موقع ممتاز لتعديل الصور والفيديو."},
+  {name:"زياد ناصر", img:"https://i.pravatar.cc/60?img=41", stars:4, comment:"سهل الاستخدام وعملي."},
+  {name:"جمال أحمد", img:"https://i.pravatar.cc/60?img=42", stars:5, comment:"أدوات رائعة للمبتدئين والمحترفين."},
+  {name:"ليلى سامي", img:"https://i.pravatar.cc/60?img=43", stars:4, comment:"واجهة سلسة وممتعة."},
+  {name:"أحمد فؤاد", img:"https://i.pravatar.cc/60?img=44", stars:5, comment:"أفضل تجربة استخدمتها."},
+  {name:"سارة علي", img:"https://i.pravatar.cc/60?img=45", stars:4, comment:"سهل جدًا وسريع."},
+  {name:"هشام مصطفى", img:"https://i.pravatar.cc/60?img=46", stars:5, comment:"كل شيء يعمل بسلاسة."},
+  {name:"رانيا جمال", img:"https://i.pravatar.cc/60?img=47", stars:4, comment:"تجربة ممتازة للمبتدئين."},
+  {name:"محمد زين", img:"https://i.pravatar.cc/60?img=48", stars:5, comment:"أدوات احترافية وواجهة جميلة."},
+  {name:"ليلى يوسف", img:"https://i.pravatar.cc/60?img=49", stars:4, comment:"الفلترات والتأثيرات رائعة."},
+  {name:"زياد فؤاد", img:"https://i.pravatar.cc/60?img=50", stars:5, comment:"موقع ممتاز وسهل الاستخدام."},
+];
+// عرض 3 مراجعات عشوائية عند الدخول
+function showRandomReviews(){
+  const container = document.getElementById('reviewsContainer');
+  container.innerHTML = "";
+  const shuffled = reviewsData.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0,3);
+  selected.forEach(r=>{
+    const div = document.createElement('div');
+    div.style.background="#fff";
+    div.style.borderRadius="15px";
+    div.style.padding="15px";
+    div.style.width="250px";
+    div.style.boxShadow="0 6px 12px rgba(0,0,0,0.1)";
+    div.style.display="flex";
+    div.style.flexDirection="column";
+    div.style.gap="8px";
+    
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="${r.img}" alt="${r.name}" style="width:40px;height:40px;border-radius:50%;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:bold; font-size:0.9rem; color:#6a1b9a;">${r.name}</span>
+          <span style="font-size:0.8rem; color:#f1c40f;">${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</span>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:#555;">${r.comment}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", showRandomReviews);
+</script>
+<script>
+function showRandomReviews(){
+  const container = document.getElementById('reviewsContainer');
+  container.innerHTML = "";
+  const shuffled = reviewsData.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0,3);
+
+  selected.forEach(r=>{
+    const div = document.createElement('div');
+    div.style.background="#fff";
+    div.style.borderRadius="15px";
+    div.style.padding="15px";
+    div.style.width="250px";
+    div.style.boxShadow="0 6px 12px rgba(0,0,0,0.1)";
+    div.style.display="flex";
+    div.style.flexDirection="column";
+    div.style.gap="8px";
+    div.style.position="relative";
+    div.style.overflow="hidden";
+
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="${r.img}" alt="${r.name}" style="width:40px;height:40px;border-radius:50%;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:bold; font-size:0.9rem; color:#6a1b9a;">${r.name}</span>
+          <span style="font-size:0.8rem; color:#f1c40f;">${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</span>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:#555;">${r.comment}</p>
+      <button class="addCommentBtn" style="
+        position:absolute;
+        top:5px;
+        right:5px;
+        font-size:0.7rem;
+        padding:2px 5px;
+        border:none;
+        border-radius:5px;
+        background:#6a1b9a;
+        color:white;
+        cursor:pointer;
+        display:none;
+      ">تعليق</button>
+      <div class="commentBox" style="display:none; flex-direction:column; gap:5px; margin-top:5px;">
+        <input type="text" placeholder="أدخل تعليقك" style="padding:4px; font-size:0.8rem;">
+        <button style="padding:4px 6px; font-size:0.8rem; background:#4a0d7a; color:white; border:none; border-radius:5px; cursor:pointer;">إرسال</button>
+      </div>
+    `;
+
+    // إظهار زر التعليق عند المرور بالماوس
+    div.addEventListener('mouseenter',()=> div.querySelector('.addCommentBtn').style.display='block');
+    div.addEventListener('mouseleave',()=>{
+      div.querySelector('.addCommentBtn').style.display='none';
+      div.querySelector('.commentBox').style.display='none';
+    });
+
+    // عند الضغط على زر التعليق
+    const btn = div.querySelector('.addCommentBtn');
+    const commentBox = div.querySelector('.commentBox');
+    btn.addEventListener('click', ()=> commentBox.style.display='flex');
+
+    // عند إرسال التعليق
+    const sendBtn = commentBox.querySelector('button');
+    const input = commentBox.querySelector('input');
+    sendBtn.addEventListener('click', ()=>{
+      if(input.value.trim()!==""){
+        alert("تم إرسال التعليق بنجاح!");
+        input.value="";
+        commentBox.style.display='none';
+      }
+    });
+
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", showRandomReviews);
+</script>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 CreatorHub. جميع الحقوق محفوظة.
+  </footer>
+</body>
+</html>
